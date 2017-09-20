@@ -1,7 +1,6 @@
 #Загрузка Authors, Authors with affiliations, EID
 library(xlsx)
 scopus <- read.xlsx("//fs5/Аналитический центр/44-Публикации (Молодняк)/2016/N/АвторПубликацияEID.xlsx", 1)
-nrow(scopus)
 
 #Разделение авторов с аффиляциями
 s <- strsplit(as.character(scopus$Authors.with.affiliations), '; ')
@@ -51,7 +50,6 @@ x$authfirst <- gsub(" ", "*", x$authfirst)
 x$url <- paste0("authlast(", x$authlast, ")%20and%20authfirst(", x$authfirst, ")")
 x <- x[order(x$Author),]
 row.names(x) <- 1:nrow(x)
-nrow(x)
 x[,"scopus.id"] <- NA
 x[,"scopus.id2"] <- NA
 x[,"scopus.id3"] <- NA
@@ -230,11 +228,11 @@ for (i in n){
 idurl <- "https://api.elsevier.com/content/author/author_id/"
 for (i in 1:2255){
   tryCatch({
-req <- fromJSON(paste0(idurl, x$scopus.id[1], "?apiKey=", apiKey, "&httpAccept=", httpAccept))
-if(req[1][[1]][[1]] == "0") stop("Отсутствует Scopus ID автора ! ---", x$Author[i])
-x$scopus.id[i] <- gsub("AUTHOR_ID:", "", req[1][[1]]$entry[4][[1]])[1]
+    req <- fromJSON(paste0(idurl, x$scopus.id[1], "?apiKey=", apiKey, "&httpAccept=", httpAccept))
+    if(req[1][[1]][[1]] == "0") stop("Отсутствует Scopus ID автора ! ---", x$Author[i])
+    x$scopus.id[i] <- gsub("AUTHOR_ID:", "", req[1][[1]]$entry[4][[1]])[1]
 
-message("Загружаются данные по ID автора ", x$Author[i])
+    message("Загружаются данные по ID автора ", x$Author[i])
   }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
 }    
 
