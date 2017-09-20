@@ -33,10 +33,6 @@ s$HSE[
     grepl("Institute of Electronics and Mathematics", s$AuthorsAffil) == TRUE | 
     grepl("Institute for Electronics and Mathematics", s$AuthorsAffil) == TRUE ] <- "HSE"
 
-
-library(jsonlite)
-library(curl)
-
 #Поиск ID авторов
 Encoding(s$Author) <- "UTF-8"
 y <- s[!is.na(s$HSE),]
@@ -86,6 +82,9 @@ baseurl <- "https://api.elsevier.com/content/search/author?query="
 affil <- "%20and%20affil(National%20Research%20University%20Higher%20School%20of%20Economics)"
 apiKey <- "YOUR_API_KEY" # работает только с компьютеров НИУ ВШЭ
 httpAccept <- "%20application%2Fjson"
+
+library(jsonlite)
+library(curl)
 
 for (i in 1:5424){
   tryCatch({
